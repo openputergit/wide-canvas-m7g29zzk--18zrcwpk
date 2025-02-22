@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Leave Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f6f8fd 0%, #e9f0ff 100%);
+        }
+        .time-picker::-webkit-calendar-picker-indicator {
+            background: none;
+            display: none;
+        }
+        .gradient-button {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+        }
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-3xl mx-auto bg-white rounded-xl card-shadow p-6 md:p-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-center bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+                HR LEAVE MANAGEMENT SYSTEM
+            </h1>
+            <h2 class="text-lg text-center text-gray-600 mt-2">Leave/Travel/Gate Pass Application Form</h2>
+        </div>
+
+        <!-- Leave Balance Table -->
+        <div class="overflow-x-auto mb-8 bg-indigo-50 rounded-lg p-4">
+            <table class="w-full border-collapse rounded-lg overflow-hidden">
+                <thead>
+                    <tr class="bg-indigo-600 text-white">
+                        <th class="p-3" colspan="3">Sick Leave (SL)</th>
+                        <th class="p-3" colspan="3">Paid Leave (PL)</th>
+                    </tr>
+                    <tr class="bg-indigo-500 text-white">
+                        <th class="p-2">Total</th>
+                        <th class="p-2">Used</th>
+                        <th class="p-2">Balance</th>
+                        <th class="p-2">Total</th>
+                        <th class="p-2">Used</th>
+                        <th class="p-2">Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-white text-center">
+                        <td class="p-3 border border-indigo-100" id="slTotal">12</td>
+                        <td class="p-3 border border-indigo-100" id="slConsumed">3</td>
+                        <td class="p-3 border border-indigo-100 font-semibold text-indigo-600" id="slBalance">9</td>
+                        <td class="p-3 border border-indigo-100" id="plTotal">24</td>
+                        <td class="p-3 border border-indigo-100" id="plConsumed">5</td>
+                        <td class="p-3 border border-indigo-100 font-semibold text-indigo-600" id="plBalance">19</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <form id="leaveForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Leave <span class="text-red-500">*</span></label>
+                    <select id="leaveType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        <option value="">Choose leave type</option>
+                        <option value="short">Short Leave</option>
+                        <option value="half">Half Leave</option>
+                        <option value="full">Full Leave</option>
+                        <option value="multiple">More than one day</option>
+                        <option value="gate">Office (Gate Pass)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Type <span class="text-red-500">*</span></label>
+                    <select id="leaveCategory" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        <option value="">Choose category</option>
+                        <option value="sick">Sick Leave</option>
+                        <option value="paid">Paid Leave</option>
+                        <option value="short">Short Leave</option>
+                        <option value="unpaid">Leave without Pay</option>
+                        <option value="travel">Travel</option>
+                        <option value="gate">Gate Pass</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">From Date <span class="text-red-500">*</span></label>
+                    <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="fromDate">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+                    <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" id="toDate">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Time From</label>
+                    <input type="time" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all time-picker" id="timeFrom">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Time To</label>
+                    <input type="time" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all time-picker" id="timeTo">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Reason <span class="text-red-500">*</span></label>
+                <textarea class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" rows="3" id="reason"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Details and Remarks</label>
+                <textarea class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" rows="3" id="remarks"></textarea>
+            </div>
+
+            <button type="submit" class="w-full gradient-button text-white py-3 px-6 rounded-lg text-lg font-semibold flex items-center justify-center gap-2">
+                <i class="bi bi-send-fill"></i>
+                Submit Application
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Your existing JavaScript remains the same
+        document.getElementById('leaveForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const leaveType = document.getElementById('leaveType').value;
+            const leaveCategory = document.getElementById('leaveCategory').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            const timeFrom = document.getElementById('timeFrom').value;
+            const timeTo = document.getElementById('timeTo').value;
+            const reason = document.getElementById('reason').value;
+            const remarks = document.getElementById('remarks').value;
+
+            if (!leaveType || !leaveCategory || !fromDate || !reason) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (new Date(fromDate) > new Date(toDate)) {
+                alert('From date cannot be later than to date');
+                return;
+            }
+
+            if ((leaveType === 'short' || leaveType === 'gate') && (!timeFrom || !timeTo)) {
+                alert('Please specify both start and end times');
+                return;
+            }
+
+            alert('Leave application submitted successfully!');
+            this.reset();
+        });
+
+        document.getElementById('leaveType').addEventListener('change', function(e) {
+            const timeInputs = document.querySelectorAll('.time-picker');
+            const toDateInput = document.getElementById('toDate');
+
+            if (e.target.value === 'short' || e.target.value === 'gate') {
+                timeInputs.forEach(input => input.removeAttribute('disabled'));
+                toDateInput.setAttribute('disabled', 'disabled');
+                toDateInput.value = document.getElementById('fromDate').value;
+            } else {
+                timeInputs.forEach(input => {
+                    input.setAttribute('disabled', 'disabled');
+                    input.value = '';
+                });
+                toDateInput.removeAttribute('disabled');
+            }
+        });
+
+        document.getElementById('fromDate').addEventListener('change', function(e) {
+            const leaveType = document.getElementById('leaveType').value;
+            if (leaveType === 'short' || leaveType === 'gate' || leaveType === 'half') {
+                document.getElementById('toDate').value = e.target.value;
+            }
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
